@@ -1,26 +1,1140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>FindPulse</title>
-  <style>
-    body { font-family: sans-serif; text-align: center; padding: 4rem; }
-    h1 { font-size: 3rem; margin-bottom: 0.5rem; }
-    p  { font-size: 1.25rem; color: #555; }
-    a.button {
-      display: inline-block;
-      margin-top: 2rem;
-      padding: 1rem 2rem;
-      background: #007ACC;
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FindPulse - Your Digital Fix Solution</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            padding: 1rem 0;
+        }
+
+        nav.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2196F3;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #2196F3;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #2196F3;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="1" fill="white" opacity="0.1"/><circle cx="10" cy="90" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            z-index: 1;
+            position: relative;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: slideInLeft 1s ease 0.5s forwards;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: slideInLeft 1s ease 0.8s forwards;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            opacity: 0;
+            animation: slideInLeft 1s ease 1.1s forwards;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #2196F3, #21CBF3);
+            color: white;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(33, 150, 243, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            opacity: 0;
+            animation: slideInRight 1s ease 0.7s forwards;
+        }
+
+        .phone-mockup {
+            width: 300px;
+            height: 600px;
+            background: linear-gradient(145deg, #f0f0f0, #cacaca);
+            border-radius: 30px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            padding: 40px 20px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 0;
+            background: #f8f9fa;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            opacity: 0;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2.5rem 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #2196F3, #21CBF3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .services-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+
+        .service-item {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .service-item:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 5rem 0;
+            background: #f8f9fa;
+        }
+
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2196F3;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #2196F3;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #2196F3;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: #2196F3;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background: #1976D2;
+            transform: translateY(-3px);
+        }
+
+        /* Animations */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Page Sections (Hidden by default) */
+        .page-section {
+            display: none;
+            min-height: 100vh;
+            padding-top: 100px;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .page-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .page-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .phone-mockup {
+                width: 250px;
+                height: 500px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>FindPulse</h1>
-  <p>The heartbeat of your tech fix</p>
-  <a href="https://instagram.com/findpulse" class="button">Follow Us</a>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo" onclick="showHome()">
+                <div class="logo-icon">FP</div>
+                FindPulse
+            </a>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showHome()">Home</a></li>
+                <li><a href="#" onclick="showServices()">Services</a></li>
+                <li><a href="#" onclick="showAbout()">About</a></li>
+                <li><a href="#" onclick="showContact()">Contact</a></li>
+                <li><a href="#" onclick="showLogin()">Login</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <main id="home-page" class="page-section active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1>Your Digital Fix, Delivered Fast</h1>
+                    <p>FindPulse offers a seamless experience for anyone seeking tech repairs or parts. Connect with verified professionals, track service progress, and get your devices fixed faster than ever.</p>
+                    <div class="cta-buttons">
+                        <a href="#" class="btn btn-primary" onclick="showServices()">Get Started</a>
+                        <a href="#" class="btn btn-secondary" onclick="showAbout()">Learn More</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="phone-mockup">
+                        <div class="phone-screen">
+                            <h3>🔍 Smart Search</h3>
+                            <p>Find parts & services instantly</p>
+                            <br>
+                            <h3>💬 Live Chat</h3>
+                            <p>Real-time support</p>
+                            <br>
+                            <h3>📊 Track Progress</h3>
+                            <p>Monitor your repairs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="section-title">
+                <h2>Why Choose FindPulse?</h2>
+                <p>Everything you need for tech repairs and parts, all in one place</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Smart Search</h3>
+                    <p>Instantly locate compatible parts, services, or experts with our intelligent search algorithm</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>Live Support</h3>
+                    <p>Chat-based troubleshooting and real-time advice from certified technicians</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h3>Verified Experts</h3>
+                    <p>Connect with trusted repair centers and professionals near you</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📦</div>
+                    <h3>Part Matching</h3>
+                    <p>Find compatible components by device model with precision accuracy</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Live Tracking</h3>
+                    <p>Monitor your service progress in real-time from start to finish</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile First</h3>
+                    <p>Works seamlessly on any device, anywhere you are</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Preview -->
+        <section class="services">
+            <div class="section-title">
+                <h2>Our Services</h2>
+                <p>Comprehensive tech solutions at your fingertips</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-item">
+                    <span class="service-icon">📱</span>
+                    <h3>Mobile Repair</h3>
+                    <p>Screen replacements, battery fixes, and more</p>
+                </div>
+                <div class="service-item">
+                    <span class="service-icon">💻</span>
+                    <h3>Laptop Service</h3>
+                    <p>Hardware upgrades and software troubleshooting</p>
+                </div>
+                <div class="service-item">
+                    <span class="service-icon">🖥️</span>
+                    <h3>PC Building</h3>
+                    <p>Custom builds and component upgrades</p>
+                </div>
+                <div class="service-item">
+                    <span class="service-icon">⌚</span>
+                    <h3>Smart Devices</h3>
+                    <p>Wearables, tablets, and IoT device support</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Services Page -->
+    <div id="services-page" class="page-section">
+        <div class="page-hero">
+            <h1>Our Services</h1>
+            <p>Comprehensive tech solutions for all your needs</p>
+        </div>
+        <div class="page-content">
+            <div class="services-grid">
+                <div class="service-item">
+                    <span class="service-icon">📱</span>
+                    <h3>Mobile Device Repair</h3>
+                    <p>Complete mobile repair services including screen replacement, battery replacement, charging port repair, camera fixes, and software troubleshooting for all major brands.</p>
+                    <div style="margin-top: 1rem;">
+                        <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">Starting from LKR 2,500</span>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <span class="service-icon">💻</span>
+                    <h3>Laptop & Computer Service</h3>
+                    <p>Full-service computer repair including hardware diagnostics, RAM upgrades, SSD installation, virus removal, operating system installation, and performance optimization.</p>
+                    <div style="margin-top: 1rem;">
+                        <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">Starting from LKR 3,000</span>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <span class="service-icon">🖥️</span>
+                    <h3>Custom PC Building</h3>
+                    <p>Professional PC assembly services with component selection guidance, compatibility checking, cable management, and post-build testing and optimization.</p>
+                    <div style="margin-top: 1rem;">
+                        <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">Starting from LKR 8,000</span>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <span class="service-icon">⌚</span>
+                    <h3>Smart Device Support</h3>
+                    <p>Specialized support for smartwatches, tablets, gaming consoles, smart home devices, and IoT equipment with setup, troubleshooting, and repair services.</p>
+                    <div style="margin-top: 1rem;">
+                        <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">Starting from LKR 1,800</span>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <span class="service-icon">🔌</span>
+                    <h3>Electronics Repair</h3>
+                    <p>General electronics repair for gaming devices, audio equipment, cameras, and other consumer electronics with component-level repair expertise.</p>
+                    <div style="margin-top: 1rem;">
+                        <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">Starting from LKR 2,000</span>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <span class="service-icon">📦</span>
+                    <h3>Parts & Components</h3>
+                    <p>Genuine and compatible parts sourcing with warranty, installation services, and compatibility verification for all major device brands and models.</p>
+                    <div style="margin-top: 1rem;">
+                        <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">Market Prices</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <div id="about-page" class="page-section">
+        <div class="page-hero">
+            <h1>About FindPulse</h1>
+            <p>The heartbeat of your digital fix</p>
+        </div>
+        <div class="page-content">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <h2 style="color: #333; margin-bottom: 2rem;">Our Story</h2>
+                <p style="font-size: 1.2rem; line-height: 1.8; color: #666; margin-bottom: 2rem;">
+                    FindPulse is more than just a tech platform—it's the heartbeat of your digital fix. Designed for Sri Lanka's fast-moving tech landscape, we seamlessly blend smart search, real-time support, and verified service listings into one sleek experience.
+                </p>
+                
+                <h2 style="color: #333; margin-bottom: 2rem;">Our Mission</h2>
+                <p style="font-size: 1.2rem; line-height: 1.8; color: #666; margin-bottom: 2rem;">
+                    We believe that tech breakdowns are frustrating, but finding the right fix shouldn't be. Our mission is to eliminate endless Googling for repair shops, guessing which parts fit your device, and delays in diagnostics or service quotes.
+                </p>
+
+                <h2 style="color: #333; margin-bottom: 2rem;">What We Offer</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                    <div style="background: #f8f9fa; padding: 2rem; border-radius: 10px;">
+                        <h3 style="color: #2196F3; margin-bottom: 1rem;">Smart Technology</h3>
+                        <p style="color: #666;">Our intelligent search and matching algorithms ensure you find exactly what you need, when you need it.</p>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 2rem; border-radius: 10px;">
+                        <h3 style="color: #2196F3; margin-bottom: 1rem;">Verified Network</h3>
+                        <p style="color: #666;">All service providers and parts suppliers are thoroughly vetted to ensure quality and reliability.</p>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 2rem; border-radius: 10px;">
+                        <h3 style="color: #2196F3; margin-bottom: 1rem;">Local Focus</h3>
+                        <p style="color: #666;">Built specifically for Sri Lankan users with local insights, pricing, and service networks.</p>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 2rem; border-radius: 10px;">
+                        <h3 style="color: #2196F3; margin-bottom: 1rem;">Future Ready</h3>
+                        <p style="color: #666;">Scalable platform ready to expand to groceries, vehicle repairs, bookshops, and any service you need.</p>
+                    </div>
+                </div>
+
+                <h2 style="color: #333; margin-bottom: 2rem;">Our Vision</h2>
+                <p style="font-size: 1.2rem; line-height: 1.8; color: #666;">
+                    With our clean interface, intelligent filters, and local-first approach, FindPulse empowers users to discover, diagnose, and solve tech issues faster than ever. We're building the future of service discovery—fast, reliable, and right at your fingertips.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact-page" class="page-section">
+        <div class="page-hero">
+            <h1>Contact Us</h1>
+            <p>Get in touch with our team</p>
+        </div>
+        <div class="contact">
+            <div class="contact-container">
+                <form class="contact-form">
+                    <h2 style="text-align: center; margin-bottom: 2rem; color: #333;">Send us a Message</h2>
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="service">Service Type</label>
+                        <select id="service" name="service" style="width: 100%; padding: 1rem; border: 2px solid #e9ecef; border-radius: 10px; font-size: 1rem;">
+                            <option value="">Select a service</option>
+                            <option value="mobile">Mobile Repair</option>
+                            <option value="laptop">Laptop Service</option>
+                            <option value="pc">PC Building</option>
+                            <option value="smart">Smart Devices</option>
+                            <option value="parts">Parts & Components</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Describe your issue or what you need help with..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Send Message</button>
+                </form>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                    <div style="text-align: center; padding: 2rem; background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">📍</div>
+                        <h3 style="color: #333; margin-bottom: 1rem;">Location</h3>
+                        <p style="color: #666;">Colombo, Western Province<br>Sri Lanka</p>
+                    </div>
+                    <div style="text-align: center; padding: 2rem; background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">📞</div>
+                        <h3 style="color: #333; margin-bottom: 1rem;">Phone</h3>
+                        <p style="color: #666;">+94 11 234 5678<br>+94 77 123 4567</p>
+                    </div>
+                    <div style="text-align: center; padding: 2rem; background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">✉️</div>
+                        <h3 style="color: #333; margin-bottom: 1rem;">Email</h3>
+                        <p style="color: #666;">info@findpulse.lk<br>support@findpulse.lk</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login-page" class="page-section">
+        <div style="min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; padding: 2rem;">
+            <div style="background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); width: 100%; max-width: 400px;">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #2196F3, #1976D2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-weight: bold; font-size: 1.5rem;">FP</div>
+                    <h2 style="color: #333; margin-bottom: 0.5rem;">Welcome Back</h2>
+                    <p style="color: #666;">Sign in to your FindPulse account</p>
+                </div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" name="password" required>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <label style="display: flex; align-items: center; color: #666; font-size: 0.9rem;">
+                            <input type="checkbox" style="margin-right: 0.5rem;"> Remember me
+                        </label>
+                        <a href="#" style="color: #2196F3; text-decoration: none; font-size: 0.9rem;">Forgot Password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">Sign In</button>
+                    <div style="text-align: center;">
+                        <span style="color: #666;">Don't have an account? </span>
+                        <a href="#" onclick="showSignup()" style="color: #2196F3; text-decoration: none; font-weight: 600;">Sign Up</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign Up Page -->
+    <div id="signup-page" class="page-section">
+        <div style="min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; padding: 2rem;">
+            <div style="background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); width: 100%; max-width: 500px;">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #2196F3, #1976D2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-weight: bold; font-size: 1.5rem;">FP</div>
+                    <h2 style="color: #333; margin-bottom: 0.5rem;">Create Account</h2>
+                    <p style="color: #666;">Join FindPulse and get started today</p>
+                </div>
+                
+                <form id="signupForm">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email Address</label>
+                        <input type="email" id="signupEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPhone">Phone Number</label>
+                        <input type="tel" id="signupPhone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userType">I am a</label>
+                        <select id="userType" name="userType" style="width: 100%; padding: 1rem; border: 2px solid #e9ecef; border-radius: 10px; font-size: 1rem;" required>
+                            <option value="">Select user type</option>
+                            <option value="customer">Customer (Looking for services)</option>
+                            <option value="provider">Service Provider (Offering services)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: flex; align-items: flex-start; color: #666; font-size: 0.9rem;">
+                            <input type="checkbox" style="margin-right: 0.5rem; margin-top: 0.2rem;" required>
+                            <span>I agree to the <a href="#" style="color: #2196F3;">Terms of Service</a> and <a href="#" style="color: #2196F3;">Privacy Policy</a></span>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">Create Account</button>
+                    <div style="text-align: center;">
+                        <span style="color: #666;">Already have an account? </span>
+                        <a href="#" onclick="showLogin()" style="color: #2196F3; text-decoration: none; font-weight: 600;">Sign In</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>FindPulse</h3>
+                <p style="color: #ccc; margin-bottom: 1rem;">The heartbeat of your digital fix. Fast, reliable, and right at your fingertips.</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">f</a>
+                    <a href="#" class="social-icon">t</a>
+                    <a href="#" class="social-icon">i</a>
+                    <a href="#" class="social-icon">l</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Services</h3>
+                <a href="#">Mobile Repair</a>
+                <a href="#">Laptop Service</a>
+                <a href="#">PC Building</a>
+                <a href="#">Smart Devices</a>
+                <a href="#">Parts & Components</a>
+            </div>
+            <div class="footer-section">
+                <h3>Company</h3>
+                <a href="#" onclick="showAbout()">About Us</a>
+                <a href="#">Careers</a>
+                <a href="#">Blog</a>
+                <a href="#">Press</a>
+                <a href="#">Partners</a>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <a href="#" onclick="showContact()">Contact Us</a>
+                <a href="#">Help Center</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Cookie Policy</a>
+            </div>
+        </div>
+        <div style="border-top: 1px solid #555; padding-top: 2rem; text-align: center; color: #ccc;">
+            <p>&copy; 2024 FindPulse. All rights reserved. | Designed for Sri Lanka's tech landscape</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation functionality
+        function showHome() {
+            hideAllPages();
+            document.getElementById('home-page').classList.add('active');
+            updateNavbar();
+        }
+
+        function showServices() {
+            hideAllPages();
+            document.getElementById('services-page').classList.add('active');
+            animateElements();
+        }
+
+        function showAbout() {
+            hideAllPages();
+            document.getElementById('about-page').classList.add('active');
+            animateElements();
+        }
+
+        function showContact() {
+            hideAllPages();
+            document.getElementById('contact-page').classList.add('active');
+            animateElements();
+        }
+
+        function showLogin() {
+            hideAllPages();
+            document.getElementById('login-page').classList.add('active');
+        }
+
+        function showSignup() {
+            hideAllPages();
+            document.getElementById('signup-page').classList.add('active');
+        }
+
+        function hideAllPages() {
+            const pages = document.querySelectorAll('.page-section');
+            pages.forEach(page => page.classList.remove('active'));
+        }
+
+        // Navbar scroll effect
+        function updateNavbar() {
+            const navbar = document.getElementById('navbar');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        }
+
+        // Animation on scroll
+        function animateElements() {
+            setTimeout(() => {
+                const elements = document.querySelectorAll('.feature-card, .service-item, .section-title');
+                elements.forEach((element, index) => {
+                    element.style.animation = `fadeInUp 0.6s ease ${index * 0.1}s forwards`;
+                });
+            }, 100);
+        }
+
+        // Form handling
+        document.addEventListener('DOMContentLoaded', function() {
+            // Contact form
+            const contactForm = document.querySelector('.contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Thank you for your message! We\'ll get back to you soon.');
+                    this.reset();
+                });
+            }
+
+            // Login form
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Login functionality would be implemented here.');
+                });
+            }
+
+            // Signup form
+            const signupForm = document.getElementById('signupForm');
+            if (signupForm) {
+                signupForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const password = document.getElementById('signupPassword').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+                    
+                    if (password !== confirmPassword) {
+                        alert('Passwords do not match!');
+                        return;
+                    }
+                    
+                    alert('Account creation functionality would be implemented here.');
+                });
+            }
+
+            // Initialize animations
+            updateNavbar();
+            animateElements();
+
+            // Mobile menu toggle
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const navLinks = document.querySelector('.nav-links');
+            
+            mobileMenu.addEventListener('click', () => {
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements when page loads
+        window.addEventListener('load', () => {
+            const elementsToAnimate = document.querySelectorAll('.feature-card, .service-item, .section-title');
+            elementsToAnimate.forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
 </body>
 </html>
